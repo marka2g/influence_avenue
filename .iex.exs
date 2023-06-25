@@ -21,6 +21,8 @@ IEx.configure(
     |> IO.chardata_to_string()
 )
 
+import Ecto.Query, warn: false
+
 alias InfluenceAvenue.Repo
 alias InfluenceAvenue.Donations
 alias InfluenceAvenue.Donationa.Donation
