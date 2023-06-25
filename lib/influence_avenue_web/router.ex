@@ -17,7 +17,7 @@ defmodule InfluenceAvenueWeb.Router do
   scope "/", InfluenceAvenueWeb do
     pipe_through :browser
 
-    get "/", PageController, :home
+    live("/", Live.DonationsLive)
   end
 
   # Other scopes may use custom stacks.

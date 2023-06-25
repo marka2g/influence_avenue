@@ -7,7 +7,7 @@ defmodule InfluenceAvenue.Donations do
   alias InfluenceAvenue.Repo
   alias InfluenceAvenue.Donations.Donation
 
-  def queryable(opts) do
+  def queryable(opts \\ %{}) do
     from(d in Donation)
     |> with_limit(opts)
     |> filter(opts)
