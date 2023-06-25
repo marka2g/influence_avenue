@@ -94,8 +94,12 @@ Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
 
 Ready to run in production? Please [check our deployment guides](https://hexdocs.pm/phoenix/deployment.html).
 
+## Helpful Links
+[Fly,io Github Workflow](https://fly.io/phoenix-files/github-actions-for-elixir-ci/)
+
 ## Learn more
 
+  * [Phoenix Fly.io Deploy Docs](https://github.com/phoenixframework/phoenix/blob/main/guides/deployment/fly.md)
   * Official website: https://www.phoenixframework.org/
   * Guides: https://hexdocs.pm/phoenix/overview.html
   * Docs: https://hexdocs.pm/phoenix

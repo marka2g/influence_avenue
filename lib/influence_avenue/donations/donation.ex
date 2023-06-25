@@ -1,4 +1,7 @@
 defmodule InfluenceAvenue.Donations.Donation do
+  @moduledoc """
+  Donation Schema
+  """
   use Ecto.Schema
   import Ecto.Changeset
 
