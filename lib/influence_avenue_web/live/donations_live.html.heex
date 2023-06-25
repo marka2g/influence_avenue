@@ -1,0 +1,14 @@
+<div class="donations-container">
+  <.table id="donations" rows={@donations}>
+    <:col :let={donation} label="Year"><%= donation.cycle %></:col>
+    <:col :let={donation} label="Party"><%= party(donation.recipient_party) %></:col>
+    <:col :let={donation} label="Corp"><%= donation.corpname %></:col>
+    <:col :let={donation} label="Candidate"><%= donation.recipient_name %></:col>
+    <:col :let={donation} label="Donator"><%= donation.contributor_name %></:col>
+    <:col :let={donation} label="Donator's Occupation">
+      <%= occupation(donation.contributor_occupation) %>
+    </:col>
+    <:col :let={donation} label="$"><%= donation.amount %></:col>
+    <:col :let={donation} label="#"><%= donation.id %></:col>
+  </.table>
+</div>
