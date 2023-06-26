@@ -503,13 +503,17 @@ defmodule InfluenceAvenueWeb.CoreComponents do
           class="relative divide-y divide-zinc-100 border-t border-zinc-200 text-sm leading-6 text-zinc-600"
         >
           <tr :for={row <- @rows} id={@row_id && @row_id.(row)} class="group hover:bg-zinc-50">
-          <%!-- <tr :for={row <- @rows} id={"row-#{row.id}"} class="group hover:bg-zinc-50"> --%>
-            <td class={"relative font-md hover:cursor-pointer pr-4"}>
+            <%!-- <tr :for={row <- @rows} id={"row-#{row.id}"} class="group hover:bg-zinc-50"> --%>
+            <td class="relative font-md hover:cursor-pointer pr-4">
               <span class="absolute -inset-y-px right-0 -left-4 group-hover:bg-zinc-50 sm:rounded-l-xl" />
               <button id={"copy-row-#{row.id}"} data-to={"#copied-row-#{row.id}"} phx-hook="CopyRow">
                 <.icon name="hero-clipboard-document" />
               </button>
-              <input type="hidden" id={"copied-row-#{row.id}"} value={"Donation Date: #{row.date}\nCorporation Name: #{row.corpname}\nAmount(in USD): #{row.amount}\nPolitical Party Affiliation: #{row.recipient_party}\nDonor: #{row.contributor_name}\nCandidate or PAC: #{row.recipient_name}"} />
+              <input
+                type="hidden"
+                id={"copied-row-#{row.id}"}
+                value={"Donation Date: #{row.date}\nCorporation Name: #{row.corpname}\nAmount(in USD): #{row.amount}\nPolitical Party Affiliation: #{row.recipient_party}\nDonor: #{row.contributor_name}\nCandidate or PAC: #{row.recipient_name}"}
+              />
             </td>
             <td
               :for={{col, i} <- Enum.with_index(@col)}
