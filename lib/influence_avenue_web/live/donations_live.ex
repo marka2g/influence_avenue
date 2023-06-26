@@ -2,8 +2,7 @@ defmodule InfluenceAvenueWeb.Live.DonationsLive do
   use InfluenceAvenueWeb, :live_view
 
   alias InfluenceAvenue.Donations
-  alias InfluenceAvenueWeb.Forms.SortingForm
-  # alias InfluenceAvenueWeb.Forms.{SortingForm, FilterForm, PaginationForm}
+  alias InfluenceAvenueWeb.Forms.{SortingForm, FilterForm}
 
   @impl true
   def mount(_params, _session, socket), do: {:ok, socket}
@@ -24,11 +23,16 @@ defmodule InfluenceAvenueWeb.Live.DonationsLive do
   end
 
   defp parse_params(socket, params) do
-    with {:ok, sorting_opts} <- SortingForm.parse(params) do
-      assign_sorting(socket, sorting_opts)
+    with {:ok, sorting_opts} <- SortingForm.parse(params),
+         {:ok, filter_opts} <- FilterForm.parse(params) do
+      socket
+      |> assign_sorting(sorting_opts)
+      |> assign_filter(filter_opts)
     else
       _error ->
-        assign_sorting(socket)
+        socket
+        |> assign_sorting()
+        |> assign_filter()
     end
   end
 
@@ -37,9 +41,24 @@ defmodule InfluenceAvenueWeb.Live.DonationsLive do
     assign(socket, :sorting, opts)
   end
 
+  defp assign_filter(socket, overrides \\ %{}) do
+    assign(socket, :filter, FilterForm.default_values(overrides))
+  end
+
   defp assign_donations(socket) do
-    %{sorting: sorting} = socket.assigns
-    assign(socket, :donations, Donations.queryable(sorting) |> Donations.fetch_records())
+    params = merge_and_sanitize_params(socket)
+    assign(socket, :donations, Donations.queryable(params) |> Donations.fetch_records())
+  end
+
+  defp merge_and_sanitize_params(socket, overrides \\ %{}) do
+    %{sorting: sorting, filter: filter} = socket.assigns
+
+    %{}
+    |> Map.merge(sorting)
+    |> Map.merge(filter)
+    |> Map.merge(overrides)
+    |> Enum.reject(fn {_key, value} -> is_nil(value) end)
+    |> Map.new()
   end
 
   defp party("100"), do: "🫏"

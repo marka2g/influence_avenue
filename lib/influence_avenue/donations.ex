@@ -47,6 +47,7 @@ defmodule InfluenceAvenue.Donations do
     |> filter_by_cycle(opts)
     |> filter_by_corpname(opts)
     |> filter_by_recipient_name(opts)
+    |> filter_by_contributor_name(opts)
     |> filter_by_recipient_party(opts)
   end
 
@@ -64,6 +65,14 @@ defmodule InfluenceAvenue.Donations do
   end
 
   defp filter_by_corpname(query, _opts), do: query
+
+  defp filter_by_contributor_name(query, %{contributor_name: contributor_name})
+       when is_binary(contributor_name) and contributor_name != "" do
+    query_string = "%#{contributor_name}%"
+    where(query, [d], ilike(d.contributor_name, ^query_string))
+  end
+
+  defp filter_by_contributor_name(query, _opts), do: query
 
   defp filter_by_recipient_name(query, %{recipient_name: recipient_name})
        when is_binary(recipient_name) and recipient_name != "" do

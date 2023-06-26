@@ -1,4 +1,8 @@
 <div class="donations-containe min-w-max">
+  
+  <.live_component module={InfluenceAvenueWeb.FilterComponent} id="filter" filter={@filter} />
+
+
   <.table id="donations" rows={@donations}>
     <:col 
       :let={donation} 
@@ -72,7 +76,7 @@
     </:col>
     <:col 
       :let={donation} 
-      label="Candidate"
+      label="Recipient"
       sort_key={:recipient_name}
       sort_type="recipient_name"
       th_class="w-2/16"
