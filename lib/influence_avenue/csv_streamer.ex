@@ -3,7 +3,8 @@ defmodule InfluenceAvenue.CsvStreamer do
   This is the NimbleCSV Parser
 
   Usage:
-    iex> CsvStreamer.parse_donations("/priv/static/files/bod_fortune_500_DIME_cont_records.csv")
+    # iex> CsvStreamer.parse_donations("/app/priv/static/files/bod_fortune_500_DIME_cont_records.csv")
+    iex> CsvStreamer.parse_donations("bod_fortune_500_DIME_cont_records.csv")
   """
 
   alias InfluenceAvenue.Repo
