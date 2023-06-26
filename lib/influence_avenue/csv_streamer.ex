@@ -1,4 +1,4 @@
-defmodule InfluenceAvenue.CsvStreamer do
+defmodule CsvStreamer do
   @moduledoc """
   This is the NimbleCSV Parser
 
