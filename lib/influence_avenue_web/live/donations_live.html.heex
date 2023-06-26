@@ -18,7 +18,7 @@
       th_class="w-1/16"
       sorting={@sorting}
     >
-      <%= donation.amount %>
+      <%= Money.new(donation.amount, :USD) %>
     </:col>
     <:col
       :let={donation} 

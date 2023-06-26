@@ -19,8 +19,8 @@ defmodule InfluenceAvenueWeb.Forms.SortingForm do
   }
 
   @default_values %{
-    sort_by: :id,
-    sort_dir: :asc
+    sort_by: :amount,
+    sort_dir: :desc
   }
 
   def parse(params) do

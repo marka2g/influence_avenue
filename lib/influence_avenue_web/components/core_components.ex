@@ -472,7 +472,7 @@ defmodule InfluenceAvenueWeb.CoreComponents do
     ~H"""
     <div class="overflow-y-auto px-4 sm:overflow-visible sm:px-0">
       <table class="w-[40rem] mt-7 sm:w-full relative">
-        <thead class="shadow-zinc-900 shadow-xlg text-sm text-left text-zinc-700 sticky top-16 bg-white z-30 w-full">
+        <thead class="shadow-zinc-900 shadow-2xl text-sm text-left text-zinc-700 sticky top-16 bg-white z-30 w-full">
           <tr>
             <th :for={col <- @col} class={"px-2 py-2 #{col[:th_class]}"}>
               <%!-- <%= col[:label] %> --%>
