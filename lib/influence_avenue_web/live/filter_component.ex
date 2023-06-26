@@ -24,7 +24,7 @@ defmodule InfluenceAvenueWeb.FilterComponent do
             <div class="basis-1/3">
               <.input
                 field={f[:recipient_party]}
-                placeholder="Party - 200 for 🐘, 100 for 🫏"
+                placeholder="Political Party - 200 for 🐘, 100 for 🫏, 'I' for Independent"
                 type="text"
               />
             </div>
