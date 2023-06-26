@@ -63,6 +63,7 @@ defmodule InfluenceAvenueWeb.Live.DonationsLive do
 
   defp party("100"), do: "🫏"
   defp party("200"), do: "🐘"
+  defp party("I"), do: "Independent"
   defp party(""), do: "NA"
   defp party(party), do: party
 

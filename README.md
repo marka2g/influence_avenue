@@ -106,7 +106,7 @@ $ fly ssh issue --agent
 $ fly ssh console
 $ /app/bin/influence_avenue remote
 
-iex> alias InfluenceAvenue.CsvStreamer
+# nope iex> CsvStreamer.parse_donations() # need to pg_dump/pg_restore on fly
 ```
 
 

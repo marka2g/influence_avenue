@@ -226,8 +226,38 @@ defmodule InfluenceAvenueWeb.CoreComponents do
     <button
       type={@type}
       class={[
-        "phx-submit-loading:opacity-75 rounded-lg bg-zinc-900 hover:bg-zinc-700 py-2 px-3",
+        "phx-submit-loading:opacity-75 rounded-lg bg-neutral-600 py-2 px-3",
         "text-sm font-semibold leading-6 text-white active:text-white/80",
+        @class
+      ]}
+      {@rest}
+    >
+      <%= render_slot(@inner_block) %>
+    </button>
+    """
+  end
+
+  @doc """
+  Renders a button for copy to clipboard.
+
+  ## Examples
+
+      <.button>Send!</.button>
+      <.button phx-click="go" class="ml-2">Send!</.button>
+  """
+  attr(:type, :string, default: nil)
+  attr(:class, :string, default: nil)
+  attr(:rest, :global, include: ~w(disabled form name value))
+
+  slot(:inner_block, required: true)
+
+  def copy_button(assigns) do
+    ~H"""
+    <button
+      type={@type}
+      class={[
+        "rounded-md py-1 px-2",
+        "text-sm font-semibold leading-6 text-neutral-700 hover:text-green-600 hover:animate-pulse",
         @class
       ]}
       {@rest}
@@ -462,7 +492,7 @@ defmodule InfluenceAvenueWeb.CoreComponents do
     attr(:label, :string)
     attr(:sort_key, :any)
     attr(:sort_type, :string)
-    attr(:th_class, :string)
+    attr(:width_class, :string)
     attr(:sorting, :any, doc: "this is the sorting assigns")
   end
 
@@ -479,6 +509,9 @@ defmodule InfluenceAvenueWeb.CoreComponents do
       <table class="w-[40rem] mt-7 sm:w-full relative">
         <thead class="shadow-zinc-900 shadow-2xl text-sm text-left text-zinc-700 sticky top-16 bg-white z-30 w-full">
           <tr>
+            <th>
+              <span class="sr-only">Copy Row to Clipboard</span>
+            </th>
             <th :for={col <- @col} class={"px-2 py-2 #{col[:th_class]}"}>
               <%!-- <%= col[:label] %> --%>
               <.live_component
@@ -500,13 +533,24 @@ defmodule InfluenceAvenueWeb.CoreComponents do
           class="relative divide-y divide-zinc-100 border-t border-zinc-200 text-sm leading-6 text-zinc-600"
         >
           <tr :for={row <- @rows} id={@row_id && @row_id.(row)} class="group hover:bg-zinc-50">
+            <td class="relative font-md hover:cursor-pointer pr-4">
+              <span class="absolute -inset-y-px right-0 -left-4 group-hover:bg-zinc-50 sm:rounded-l-xl" />
+
+              <.copy_button phx-hook="CopyRow" data-to={"#copied-row-#{row.id}"}>
+                <.icon name="hero-clipboard-document" />
+              </.copy_button>
+              <input
+                type="hidden"
+                id={"copied-row-#{row.id}"}
+                value={"Donation Date: #{row.date}\nCorporation Name: #{row.corpname}\nAmount(in USD): #{row.amount}\nPolitical Party Affiliation: #{row.recipient_party}\nDonor: #{row.contributor_name}\nCandidate or PAC: #{row.recipient_name}"}
+              />
+            </td>
             <td
               :for={{col, i} <- Enum.with_index(@col)}
               phx-click={@row_click && @row_click.(row)}
               class={["relative font-md #{col[:tr_class]}", @row_click && "hover:cursor-pointer"]}
             >
               <div class="block py-4 pr-6">
-                <span class="absolute -inset-y-px right-0 -left-4 group-hover:bg-zinc-50 sm:rounded-l-xl" />
                 <span class={["relative", i == 0 && "font-semibold text-zinc-900"]}>
                   <%= render_slot(col, @row_item.(row)) %>
                 </span>
