@@ -81,7 +81,9 @@ iex> Donations.queryable(%{recipient_party: "200", limit: total_count})
 # iex> Donations.queryable(%{recipient_party: "repub", limit: 313_914})
 
 #<><><><><><><><><><><><><><><><>
-# Paginate
+# Infinity Scroll
+
+
 ```
 
 ---
@@ -96,6 +98,18 @@ Ready to run in production? Please [check our deployment guides](https://hexdocs
 
 ## Helpful Links
 [Fly.io Github Workflow](https://fly.io/phoenix-files/github-actions-for-elixir-ci/)
+
+
+## Fly Commands
+```bash
+$ fly ssh issue --agent
+$ fly ssh console
+$ /app/bin/influence_avenue remote
+
+iex> alias InfluenceAvenue.CsvStreamer
+```
+
+
 
 ## Learn more
 

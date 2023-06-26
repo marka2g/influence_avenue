@@ -3,18 +3,16 @@ defmodule InfluenceAvenue.CsvStreamer do
   This is the NimbleCSV Parser
 
   Usage:
-    # iex> CsvStreamer.parse_donations("/app/priv/static/files/bod_fortune_500_DIME_cont_records.csv")
-    iex> CsvStreamer.parse_donations("bod_fortune_500_DIME_cont_records.csv")
+    iex> CsvStreamer.parse_donations()
   """
 
   alias InfluenceAvenue.Repo
   alias InfluenceAvenue.Donations.Donation
 
-  def parse_donations(file_path) do
+  def parse_donations() do
     NimbleCSV.define(DonationsParser, separator: ",", escape: "\"")
 
-    File.cwd!()
-    |> Path.join(file_path)
+    "bod_fortune_500_DIME_cont_records.csv"
     |> File.stream!()
     |> DonationsParser.parse_stream()
     |> Stream.map(fn [
