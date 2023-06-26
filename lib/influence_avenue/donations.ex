@@ -7,23 +7,25 @@ defmodule InfluenceAvenue.Donations do
   alias InfluenceAvenue.Repo
   alias InfluenceAvenue.Donations.Donation
 
+  def total_count(), do: Repo.aggregate(Donation, :count)
+  def total_query_count(query), do: Repo.aggregate(query, :count)
+
   def queryable(opts \\ %{}) do
     from(d in Donation)
-    |> with_limit(opts)
+    |> infinity_scroll(opts)
     |> filter(opts)
     |> sort(opts)
   end
 
-  def total_count(), do: Repo.aggregate(Donation, :count)
-  def total_query_count(query), do: Repo.aggregate(query, :count)
+  def fetch_records(query), do: query |> Repo.all()
 
-  def fetch_records(query) do
+  defp infinity_scroll(query, %{limit: limit, offset: offset, count: count}) do
     query
-    |> Repo.all()
+    |> limit(^limit)
+    |> offset(^offset)
   end
 
-  defp with_limit(query, %{limit: limit}), do: limit(query, ^limit)
-  defp with_limit(query, _), do: limit(query, 25)
+  defp infinity_scroll(query, _), do: query
 
   defp sort(query, %{sort_by: sort_by, sort_dir: sort_dir})
        when sort_by in [

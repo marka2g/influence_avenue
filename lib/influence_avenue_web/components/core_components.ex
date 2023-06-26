@@ -257,7 +257,7 @@ defmodule InfluenceAvenueWeb.CoreComponents do
       type={@type}
       class={[
         "rounded-md py-1 px-2",
-        "text-sm font-semibold leading-6 text-neutral-700 hover:text-green-600 hover:animate-pulse",
+        "text-sm font-semibold leading-6 text-neutral-700 hover:text-green-700 hover:animate-pulse",
         @class
       ]}
       {@rest}
@@ -529,6 +529,7 @@ defmodule InfluenceAvenueWeb.CoreComponents do
         </thead>
         <tbody
           id={@id}
+          phx-hook="InfinityScroll"
           phx-update={match?(%Phoenix.LiveView.LiveStream{}, @rows) && "stream"}
           class="relative divide-y divide-zinc-100 border-t border-zinc-200 text-sm leading-6 text-zinc-600"
         >

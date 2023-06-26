@@ -23,11 +23,11 @@ import {LiveSocket} from "phoenix_live_view"
 import topbar from "../vendor/topbar"
 
 import CopyRow from "./copy-row";
-// import InfinityScroll from "./infinity-scroll";
+import InfinityScroll from "./infinity-scroll";
 
 let Hooks = {};
 Hooks.CopyRow = CopyRow;
-// Hooks.InfinityScroll = InfinityScroll;
+Hooks.InfinityScroll = InfinityScroll;
 
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 let liveSocket = new LiveSocket("/live", Socket, {
