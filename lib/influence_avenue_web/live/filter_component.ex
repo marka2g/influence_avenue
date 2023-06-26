@@ -7,7 +7,6 @@ defmodule InfluenceAvenueWeb.FilterComponent do
     ~H"""
     <div id="table-filter">
       <.form :let={f} for={@changeset} as="filter" phx-submit="search" phx-target={@myself}>
-
         <div class="flex flex-col">
           <div class="flex flex-row gap-4">
             <div class="flex-none w-36 h-14">
@@ -23,7 +22,11 @@ defmodule InfluenceAvenueWeb.FilterComponent do
 
           <div class="flex gap-4">
             <div class="basis-1/3">
-              <.input field={f[:recipient_party]} placeholder="Party - 200 for 🐘, 100 for 🫏" type="text" />
+              <.input
+                field={f[:recipient_party]}
+                placeholder="Party - 200 for 🐘, 100 for 🫏"
+                type="text"
+              />
             </div>
             <div class="basis-2/3">
               <div class="flex flex-row gap-4">
@@ -37,7 +40,6 @@ defmodule InfluenceAvenueWeb.FilterComponent do
             </div>
           </div>
         </div>
-
       </.form>
     </div>
     """
