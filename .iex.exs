@@ -22,7 +22,7 @@ IEx.configure(
 )
 
 # import Ecto.Query, warn: false
-
+alias InfluenceAvenue.CsvStreamer
 alias InfluenceAvenue.Repo
 alias InfluenceAvenue.Donations
 alias InfluenceAvenue.Donationa.Donation
