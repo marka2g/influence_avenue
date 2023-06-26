@@ -2,28 +2,45 @@ defmodule InfluenceAvenueWeb.Live.DonationsLive do
   use InfluenceAvenueWeb, :live_view
 
   alias InfluenceAvenue.Donations
-  # alias InfluenceAvenueWeb.{SortingForm, FilterForm, PaginationForm}
+  alias InfluenceAvenueWeb.Forms.SortingForm
+  # alias InfluenceAvenueWeb.Forms.{SortingForm, FilterForm, PaginationForm}
 
   @impl true
   def mount(_params, _session, socket), do: {:ok, socket}
 
   @impl true
-  def handle_params(_params, _uri, socket) do
-    {:noreply, assign_donations(socket)}
+  def handle_info({:update, opts}, socket) do
+    {:noreply, push_patch(socket, to: ~p"/?#{opts}", replace: true)}
+  end
+
+  @impl true
+  def handle_params(params, _uri, socket) do
+    socket =
+      socket
+      |> parse_params(params)
+      |> assign_donations()
+
+    {:noreply, socket}
+  end
+
+  defp parse_params(socket, params) do
+    with {:ok, sorting_opts} <- SortingForm.parse(params) do
+      assign_sorting(socket, sorting_opts)
+    else
+      _error ->
+        assign_sorting(socket)
+    end
+  end
+
+  defp assign_sorting(socket, overrides \\ %{}) do
+    opts = Map.merge(SortingForm.default_values(), overrides)
+    assign(socket, :sorting, opts)
   end
 
   defp assign_donations(socket) do
-    assign(socket, :donations, Donations.queryable() |> Donations.fetch_records())
+    %{sorting: sorting} = socket.assigns
+    assign(socket, :donations, Donations.queryable(sorting) |> Donations.fetch_records())
   end
-
-  # defp parse_params(socket, params)
-  # defp assign_donations(socket)
-  # defp assign_sorting(socket, overrides \\ %{})
-  # defp assign_filter(socket, overrides \\ %{})
-  # defp assign_pagination(socket, overrides \\ %{})
-  # defp assign_total_count(socket, total_count)
-  # defp maybe_reset_pagaination(overrides)
-  # defp merge_and_sanitize_params(socket, overrides \\ %{})
 
   defp party("100"), do: "🫏"
   defp party("200"), do: "🐘"

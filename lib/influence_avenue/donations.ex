@@ -23,10 +23,19 @@ defmodule InfluenceAvenue.Donations do
   end
 
   defp with_limit(query, %{limit: limit}), do: limit(query, ^limit)
-  defp with_limit(query, _), do: limit(query, 10)
+  defp with_limit(query, _), do: limit(query, 25)
 
   defp sort(query, %{sort_by: sort_by, sort_dir: sort_dir})
-       when sort_by in [:amount, :cycle, :corpname, :recipient_name, :recipient_party] and
+       when sort_by in [
+              :id,
+              :amount,
+              :cycle,
+              :corpname,
+              :recipient_name,
+              :recipient_party,
+              :contributor_name,
+              :contributor_occupation
+            ] and
               sort_dir in [:asc, :desc] do
     order_by(query, {^sort_dir, ^sort_by})
   end
