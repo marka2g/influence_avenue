@@ -226,8 +226,38 @@ defmodule InfluenceAvenueWeb.CoreComponents do
     <button
       type={@type}
       class={[
-        "phx-submit-loading:opacity-75 rounded-lg bg-zinc-900 hover:bg-zinc-700 py-2 px-3",
+        "phx-submit-loading:opacity-75 rounded-lg bg-neutral-600 py-2 px-3",
         "text-sm font-semibold leading-6 text-white active:text-white/80",
+        @class
+      ]}
+      {@rest}
+    >
+      <%= render_slot(@inner_block) %>
+    </button>
+    """
+  end
+
+  @doc """
+  Renders a button for copy to clipboard.
+
+  ## Examples
+
+      <.button>Send!</.button>
+      <.button phx-click="go" class="ml-2">Send!</.button>
+  """
+  attr(:type, :string, default: nil)
+  attr(:class, :string, default: nil)
+  attr(:rest, :global, include: ~w(disabled form name value))
+
+  slot(:inner_block, required: true)
+
+  def copy_button(assigns) do
+    ~H"""
+    <button
+      type={@type}
+      class={[
+        "rounded-md py-1 px-2",
+        "text-sm font-semibold leading-6 text-neutral-700 hover:text-green-600 hover:animate-pulse",
         @class
       ]}
       {@rest}
@@ -503,12 +533,12 @@ defmodule InfluenceAvenueWeb.CoreComponents do
           class="relative divide-y divide-zinc-100 border-t border-zinc-200 text-sm leading-6 text-zinc-600"
         >
           <tr :for={row <- @rows} id={@row_id && @row_id.(row)} class="group hover:bg-zinc-50">
-            <%!-- <tr :for={row <- @rows} id={"row-#{row.id}"} class="group hover:bg-zinc-50"> --%>
             <td class="relative font-md hover:cursor-pointer pr-4">
               <span class="absolute -inset-y-px right-0 -left-4 group-hover:bg-zinc-50 sm:rounded-l-xl" />
-              <button id={"copy-row-#{row.id}"} data-to={"#copied-row-#{row.id}"} phx-hook="CopyRow">
-                <.icon name="hero-clipboard-document" />
-              </button>
+
+              <.copy_button phx-hook="CopyRow" data-to={"#copied-row-#{row.id}"}>
+                <.icon name="hero-clipboard-document"/>
+              </.copy_button>
               <input
                 type="hidden"
                 id={"copied-row-#{row.id}"}
