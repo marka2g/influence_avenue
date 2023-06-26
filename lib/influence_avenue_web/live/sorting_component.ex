@@ -5,7 +5,6 @@ defmodule InfluenceAvenueWeb.SortingComponent do
     ~H"""
     <div phx-click="sort" phx-target={@myself}>
       <%= @label %> <%= chevron(@sorting, @key) %>
-      <%!-- <%= chevron(@sorting, @key) %> --%>
     </div>
     """
   end

@@ -1,17 +1,19 @@
-defmodule CsvStreamer do
+defmodule InfluenceAvenue.CsvStreamer do
   @moduledoc """
   This is the NimbleCSV Parser
 
   Usage:
-    iex> CsvStreamer.define_parser()
-    iex> CsvStreamer.parse_donations()
+    iex> CsvStreamer.parse_donations("/bod_fortune_500_DIME_cont_records.csv")
   """
 
   alias InfluenceAvenue.Repo
   alias InfluenceAvenue.Donations.Donation
 
-  def parse_donations() do
-    "bod_fortune_500_DIME_cont_records.csv"
+  def parse_donations(file_path) do
+    NimbleCSV.define(DonationsParser, separator: ",", escape: "\"")
+
+    File.cwd!()
+    |> Path.join(file_path)
     |> File.stream!()
     |> DonationsParser.parse_stream()
     |> Stream.map(fn [
@@ -42,7 +44,7 @@ defmodule CsvStreamer do
                        recipient_name,
                        recipient_party
                      ] ->
-      %Donation{
+      donation = %Donation{
         corpname: :binary.copy(corpname),
         cycle: :binary.copy(cycle) |> cast_to_int(),
         amount: :binary.copy(amount) |> cast_to_int(),
@@ -68,13 +70,10 @@ defmodule CsvStreamer do
           longitude: longitude |> to_string() |> :binary.copy()
         }
       }
-      |> Repo.insert!()
+
+      if donation.amount >= 1, do: donation |> Repo.insert!()
     end)
     |> Stream.run()
-  end
-
-  def define_parser() do
-    NimbleCSV.define(DonationsParser, separator: ",", escape: "\"")
   end
 
   defp cast_to_int(str) do
