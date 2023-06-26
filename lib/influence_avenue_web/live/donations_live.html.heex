@@ -1,14 +1,84 @@
-<div class="donations-container">
+<div class="donations-containe min-w-max">
   <.table id="donations" rows={@donations}>
-    <:col :let={donation} label="Corporation"><%= donation.corpname %></:col>
-    <:col :let={donation} label="Party"><%= party(donation.recipient_party) %></:col>
-    <:col :let={donation} label="Year"><%= donation.cycle %></:col>
-    <:col :let={donation} label="Candidate"><%= donation.recipient_name %></:col>
-    <:col :let={donation} label="Donator"><%= donation.contributor_name %></:col>
-    <:col :let={donation} label="Position">
+    <:col 
+      :let={donation} 
+      label="#"
+      sort_key={:id}
+      sort_type="id"
+      th_class="w-1/16"
+      sorting={@sorting}
+    >
+      <%= donation.id %>
+    </:col>
+    <:col 
+      :let={donation} 
+      label="$"
+      sort_key={:amount}
+      sort_type="amount"
+      th_class="w-1/16"
+      sorting={@sorting}
+    >
+      <%= donation.amount %>
+    </:col>
+    <:col
+      :let={donation} 
+      label="Corporation"
+      sort_key={:corpname}
+      sort_type="corpname"
+      th_class="w-5/16"
+      sorting={@sorting}
+    >
+      <%= donation.corpname %>
+    </:col>
+    <:col 
+      :let={donation} 
+      label="Party"
+      sort_key={:recipient_party}
+      sort_type="recipient_party"
+      th_class="w-1/16"
+      sorting={@sorting}
+    >
+      <%= party(donation.recipient_party) %>
+    </:col>
+    <:col 
+      :let={donation} 
+      label="Year"
+      sort_key={:cycle}
+      sort_type="cycle"
+      th_class="w-1/16"
+      sorting={@sorting}
+    >
+      <%= donation.cycle %>
+    </:col>
+    <:col 
+      :let={donation} 
+      label="Donor"
+      sort_key={:contributor_name}
+      sort_type="contributor_name"
+      th_class="w-2/16"
+      sorting={@sorting}
+    >
+      <%= donation.contributor_name %>
+    </:col>
+    <:col 
+      :let={donation} 
+      label="Position"
+      sort_key={:contributor_occupation}
+      sort_type="contributor_occupation"
+      th_class="w-2/16"
+      sorting={@sorting}
+    >
       <%= occupation(donation.contributor_occupation) %>
     </:col>
-    <:col :let={donation} label="$"><%= donation.amount %></:col>
-    <:col :let={donation} label="#"><%= donation.id %></:col>
+    <:col 
+      :let={donation} 
+      label="Candidate"
+      sort_key={:recipient_name}
+      sort_type="recipient_name"
+      th_class="w-2/16"
+      sorting={@sorting}
+    >
+      <%= donation.recipient_name %>
+    </:col>
   </.table>
 </div>

@@ -455,6 +455,10 @@ defmodule InfluenceAvenueWeb.CoreComponents do
 
   slot :col, required: true do
     attr :label, :string
+    attr :sort_key, :any
+    attr :sort_type, :string
+    attr :th_class, :string
+    attr :sorting, :any, doc: "this is the sorting assigns"
   end
 
   slot :action, doc: "the slot for showing user actions in the last table column"
@@ -468,10 +472,17 @@ defmodule InfluenceAvenueWeb.CoreComponents do
     ~H"""
     <div class="overflow-y-auto px-4 sm:overflow-visible sm:px-0">
       <table class="w-[40rem] mt-7 sm:w-full relative">
-        <thead class="text-sm text-left leading-6 text-zinc-700 sticky top-16 bg-white z-30">
+        <thead class="shadow-zinc-900 shadow-xlg text-sm text-left text-zinc-700 sticky top-16 bg-white z-30 w-full">
           <tr>
-            <th :for={col <- @col} class="py-4 pl-2 pr-6 font-md">
-              <%= col[:label] %>
+            <th :for={col <- @col} class={"px-2 py-2 #{col[:th_class]}"}>
+              <%!-- <%= col[:label] %> --%>
+              <.live_component
+                module={InfluenceAvenueWeb.SortingComponent}
+                id={"sorting-#{col[:sort_type]}"}
+                label={col[:label]}
+                key={col[:sort_key]}
+                sorting={col[:sorting]}
+              />
             </th>
             <th class="relative p-0 pb-4">
               <span class="sr-only"><%= gettext("Actions") %></span>
@@ -487,7 +498,7 @@ defmodule InfluenceAvenueWeb.CoreComponents do
             <td
               :for={{col, i} <- Enum.with_index(@col)}
               phx-click={@row_click && @row_click.(row)}
-              class={["relative p-0", @row_click && "hover:cursor-pointer"]}
+              class={["relative font-md #{col[:tr_class]}", @row_click && "hover:cursor-pointer"]}
             >
               <div class="block py-4 pr-6">
                 <span class="absolute -inset-y-px right-0 -left-4 group-hover:bg-zinc-50 sm:rounded-l-xl" />
