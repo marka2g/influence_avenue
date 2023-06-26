@@ -5,7 +5,35 @@ defmodule InfluenceAvenueWeb.Live.DonationsLive do
   alias InfluenceAvenueWeb.Forms.{SortingForm, FilterForm}
 
   @impl true
-  def mount(_params, _session, socket), do: {:ok, socket}
+  def mount(_params, _session, socket) do
+    count = Donations.total_count()
+
+    socket =
+      socket
+      |> assign(
+        offset: 0,
+        limit: 25,
+        count: count
+      )
+
+    {:ok, socket}
+  end
+
+  @imp true
+  def handle_event("load-more", _, socket) do
+    %{offset: offset, limit: limit, count: count} = socket.assigns
+
+    socket =
+      if offset < count do
+        socket
+        |> assign(offset: offset + limit)
+        |> assign_donations()
+      else
+        socket
+      end
+
+    {:noreply, socket}
+  end
 
   @impl true
   def handle_info({:update, opts}, socket) do
@@ -20,6 +48,11 @@ defmodule InfluenceAvenueWeb.Live.DonationsLive do
       |> assign_donations()
 
     {:noreply, socket}
+  end
+
+  defp assign_donations(socket) do
+    params = merge_and_sanitize_params(socket)
+    assign(socket, :donations, Donations.queryable(params) |> Donations.fetch_records())
   end
 
   defp parse_params(socket, params) do
@@ -45,17 +78,19 @@ defmodule InfluenceAvenueWeb.Live.DonationsLive do
     assign(socket, :filter, FilterForm.default_values(overrides))
   end
 
-  defp assign_donations(socket) do
-    params = merge_and_sanitize_params(socket)
-    assign(socket, :donations, Donations.queryable(params) |> Donations.fetch_records())
-  end
-
   defp merge_and_sanitize_params(socket, overrides \\ %{}) do
-    %{sorting: sorting, filter: filter} = socket.assigns
+    %{
+      sorting: sorting,
+      filter: filter,
+      limit: limit,
+      offset: offset,
+      count: count
+    } = socket.assigns
 
     %{}
     |> Map.merge(sorting)
     |> Map.merge(filter)
+    |> Map.merge(%{limit: limit, offset: offset, count: count})
     |> Map.merge(overrides)
     |> Enum.reject(fn {_key, value} -> is_nil(value) end)
     |> Map.new()
