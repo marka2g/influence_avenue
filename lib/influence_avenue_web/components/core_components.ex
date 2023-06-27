@@ -537,7 +537,7 @@ defmodule InfluenceAvenueWeb.CoreComponents do
             <td class="relative font-md hover:cursor-pointer pr-4">
               <span class="absolute -inset-y-px right-0 -left-4 group-hover:bg-zinc-50 sm:rounded-l-xl" />
 
-              <.copy_button phx-hook="CopyRow" data-to={"#copied-row-#{row.id}"}>
+              <.copy_button id={"row-#{row.id}"} phx-hook="CopyRow" data-to={"#copied-row-#{row.id}"}>
                 <.icon name="hero-clipboard-document" />
               </.copy_button>
               <input
