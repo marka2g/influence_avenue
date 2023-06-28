@@ -7,7 +7,6 @@
       label="#"
       sort_key={:id}
       sort_type="id"
-      width_class="w-1/16"
       sorting={@sorting}
     >
       <%= donation.id %>
@@ -17,7 +16,6 @@
       label="$"
       sort_key={:amount}
       sort_type="amount"
-      width_class="w-1/16"
       sorting={@sorting}
     >
       <%= Money.new(donation.amount, :USD) %>
@@ -27,7 +25,6 @@
       label="Corporation"
       sort_key={:corpname}
       sort_type="corpname"
-      width_class="w-5/16"
       sorting={@sorting}
     >
       <%= donation.corpname %>
@@ -37,7 +34,6 @@
       label="Party"
       sort_key={:recipient_party}
       sort_type="recipient_party"
-      width_class="w-1/16"
       sorting={@sorting}
     >
       <%= party(donation.recipient_party) %>
@@ -47,7 +43,6 @@
       label="Year"
       sort_key={:cycle}
       sort_type="cycle"
-      width_class="w-1/16"
       sorting={@sorting}
     >
       <%= donation.cycle %>
@@ -57,7 +52,6 @@
       label="Donor"
       sort_key={:contributor_name}
       sort_type="contributor_name"
-      width_class="w-2/16"
       sorting={@sorting}
     >
       <%= donation.contributor_name %>
@@ -67,7 +61,6 @@
       label="Position"
       sort_key={:contributor_occupation}
       sort_type="contributor_occupation"
-      width_class="w-2/16"
       sorting={@sorting}
     >
       <%= occupation(donation.contributor_occupation) %>
@@ -77,7 +70,6 @@
       label="Recipient"
       sort_key={:recipient_name}
       sort_type="recipient_name"
-      width_class="w-2/16"
       sorting={@sorting}
     >
       <%= donation.recipient_name %>

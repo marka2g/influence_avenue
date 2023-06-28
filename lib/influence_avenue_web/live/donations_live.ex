@@ -35,6 +35,23 @@ defmodule InfluenceAvenueWeb.Live.DonationsLive do
     {:noreply, socket}
   end
 
+  @imp true
+  def handle_event("set-party", %{"value" => party}, socket) do
+    filter = %{"recipient_party" => party}
+
+    IO.inspect(filter, label: "filter in set-party")
+
+    case FilterForm.parse(filter) do
+      {:ok, opts} ->
+        send(self(), {:update, opts})
+
+      {:error, changeset} ->
+        {:noreply, assign(socket, :changeset, changeset)}
+    end
+
+    {:noreply, socket}
+  end
+
   @impl true
   def handle_info({:update, opts}, socket) do
     {:noreply, push_patch(socket, to: ~p"/?#{opts}", replace: true)}

@@ -343,7 +343,7 @@ defmodule InfluenceAvenueWeb.CoreComponents do
           name={@name}
           value="true"
           checked={@checked}
-          class="rounded border-zinc-300 text-zinc-900 focus:ring-0"
+          class="rounded border-zinc-300 text-zinc-800 focus:ring-0"
           {@rest}
         />
         <%= @label %>
@@ -380,7 +380,7 @@ defmodule InfluenceAvenueWeb.CoreComponents do
         id={@id}
         name={@name}
         class={[
-          "mt-2 block w-full rounded-lg text-zinc-900 focus:ring-0 sm:text-sm sm:leading-6",
+          "mt-2 block w-full rounded-lg text-zinc-800 focus:ring-0 sm:text-sm sm:leading-6",
           "min-h-[6rem] phx-no-feedback:border-zinc-300 phx-no-feedback:focus:border-zinc-400",
           @errors == [] && "border-zinc-300 focus:border-zinc-400",
           @errors != [] && "border-rose-400 focus:border-rose-400"
@@ -403,7 +403,7 @@ defmodule InfluenceAvenueWeb.CoreComponents do
         id={@id}
         value={Phoenix.HTML.Form.normalize_value(@type, @value)}
         class={[
-          "mt-2 block w-full rounded-lg text-zinc-900 focus:ring-0 sm:text-sm sm:leading-6",
+          "mt-2 block w-full rounded-lg text-zinc-800 focus:ring-0 sm:text-sm sm:leading-6",
           "phx-no-feedback:border-zinc-300 phx-no-feedback:focus:border-zinc-400",
           @errors == [] && "border-zinc-300 focus:border-zinc-400",
           @errors != [] && "border-rose-400 focus:border-rose-400"
@@ -522,7 +522,7 @@ defmodule InfluenceAvenueWeb.CoreComponents do
             >
               <div class="block py-4 pr-6">
                 <span class="absolute -inset-y-px right-0 -left-4 group-hover:bg-zinc-50 sm:rounded-l-xl" />
-                <span class={["relative", i == 0 && "font-semibold text-zinc-900"]}>
+                <span class={["relative", i == 0 && "font-semibold text-zinc-800"]}>
                   <%= render_slot(col, @row_item.(row)) %>
                 </span>
               </div>
@@ -532,7 +532,7 @@ defmodule InfluenceAvenueWeb.CoreComponents do
                 <span class="absolute -inset-y-px -right-4 left-0 group-hover:bg-zinc-50 sm:rounded-r-xl" />
                 <span
                   :for={action <- @action}
-                  class="relative ml-4 font-semibold leading-6 text-zinc-900 hover:text-zinc-700"
+                  class="relative ml-4 font-semibold leading-6 text-zinc-800 hover:text-zinc-700"
                 >
                   <%= render_slot(action, @row_item.(row)) %>
                 </span>
@@ -629,7 +629,7 @@ defmodule InfluenceAvenueWeb.CoreComponents do
               class={["relative font-md #{col[:tr_class]}", @row_click && "hover:cursor-pointer"]}
             >
               <div class="block py-4 pr-6">
-                <span class={["relative", i == 0 && "font-semibold text-zinc-900"]}>
+                <span class={["relative", i == 0 && "font-semibold text-zinc-800"]}>
                   <%= render_slot(col, @row_item.(row)) %>
                 </span>
               </div>
@@ -639,7 +639,7 @@ defmodule InfluenceAvenueWeb.CoreComponents do
                 <span class="absolute -inset-y-px -right-4 left-0 group-hover:bg-zinc-50 sm:rounded-r-xl" />
                 <span
                   :for={action <- @action}
-                  class="relative ml-4 font-semibold leading-6 text-zinc-900 hover:text-zinc-700"
+                  class="relative ml-4 font-semibold leading-6 text-zinc-800 hover:text-zinc-700"
                 >
                   <%= render_slot(action, @row_item.(row)) %>
                 </span>
@@ -694,7 +694,7 @@ defmodule InfluenceAvenueWeb.CoreComponents do
     >
       <%!-- header --%>
       <div
-        class="self-stretch h-12 px-5 pt-2 mt-2 bg-gradient-to-r from-violet-500 to-purple-500/90 border border-neutral-50 rounded-t-md justify-start items-center text-neutral-200 gap-6 inline-flex sticky top-20 z-30"
+        class="self-stretch h-12 px-5 pt-2 mt-2 bg-gradient-to-r from-green-600 to-lime-500/80 border border-neutral-50 rounded-t-md justify-start items-center text-neutral-200 gap-6 inline-flex sticky top-20 z-30"
       >
         <div class="copy-paste-header">
           <.icon name="hero-clipboard-document" />
@@ -719,7 +719,6 @@ defmodule InfluenceAvenueWeb.CoreComponents do
           </div>
         </div>
       </div>
-
       <%!-- body --%>
       <div
         id={@id}
@@ -807,7 +806,7 @@ defmodule InfluenceAvenueWeb.CoreComponents do
     <div class="mt-16">
       <.link
         navigate={@navigate}
-        class="text-sm font-semibold leading-6 text-zinc-900 hover:text-zinc-700"
+        class="text-sm font-semibold leading-6 text-zinc-800 hover:text-zinc-700"
       >
         <.icon name="hero-arrow-left-solid" class="h-3 w-3" />
         <%= render_slot(@inner_block) %>
