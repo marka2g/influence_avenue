@@ -257,7 +257,7 @@ defmodule InfluenceAvenueWeb.CoreComponents do
       type={@type}
       class={[
         "rounded-md py-1 px-2",
-        "text-sm font-semibold leading-6 text-neutral-700 hover:text-green-700 hover:animate-pulse",
+        "text-sm font-semibold leading-6 text-neutral-700",
         @class
       ]}
       {@rest}
@@ -507,7 +507,7 @@ defmodule InfluenceAvenueWeb.CoreComponents do
     ~H"""
     <div class="overflow-y-auto px-4 sm:overflow-visible sm:px-0">
       <table class="w-[40rem] mt-7 sm:w-full relative">
-        <thead class="shadow-zinc-900 shadow-2xl text-sm text-left text-zinc-700 sticky top-16 bg-white z-30 w-full">
+        <thead class="shadow-zinc-900 shadow-2xl text-sm text-left text-zinc-700 bg-white sticky top-16 z-30 w-full">
           <tr>
             <th>
               <span class="sr-only">Copy Row to Clipboard</span>
@@ -571,6 +571,111 @@ defmodule InfluenceAvenueWeb.CoreComponents do
           </tr>
         </tbody>
       </table>
+    </div>
+    """
+  end
+
+  # Responsive Table
+  @doc ~S"""
+  Renders a table with generic styling.
+
+  ## Examples
+
+      <.resp_table id="users" rows={@users}>
+        <:col :let={user} label="id"><%= user.id %></:col>
+        <:col :let={user} label="username"><%= user.username %></:col>
+      </.resp_table>
+  """
+  attr(:id, :string, required: true)
+  attr(:rows, :list, required: true)
+  attr(:row_id, :any, default: nil, doc: "the function for generating the row id")
+  attr(:row_click, :any, default: nil, doc: "the function for handling phx-click on each row")
+
+  attr(:row_item, :any,
+    default: &Function.identity/1,
+    doc: "the function for mapping each row before calling the :col and :action slots"
+  )
+
+  slot :col, required: true do
+    attr(:label, :string)
+    attr(:sort_key, :any)
+    attr(:sort_type, :string)
+    attr(:sorting, :any, doc: "this is the sorting assigns")
+  end
+
+  slot(:action, doc: "the slot for showing user actions in the last table column")
+
+  def resp_table(assigns) do
+    assigns =
+      with %{rows: %Phoenix.LiveView.LiveStream{}} <- assigns do
+        assign(assigns, row_id: assigns.row_id || fn {id, _item} -> id end)
+      end
+
+    ~H"""
+    <div
+      class="w-[1200px] h-full mt-2 bg-neutral-50 rounded-lg shadow-zinc-300 shadow-lg text-sm text-left flex-col justify-start items-start inline-flex"
+    >
+      <%!-- header --%>
+      <div
+        class="self-stretch h-12 px-5 pt-2 mt-2 bg-gradient-to-r from-violet-500 to-purple-500/90 border border-neutral-50 rounded-t-md justify-start items-center text-neutral-200 gap-6 inline-flex sticky top-20 z-30"
+      >
+        <div class="copy-paste-header">
+          <.icon name="hero-clipboard-document" />
+        </div>
+
+        <div
+          :for={col <- @col}
+          class="grow shrink basis-0 self-stretch pt-2 justify-center items-center gap-2.5 flex"
+        >
+          <div class="grow shrink basis-0 self-stretch justify-start items-center gap-2.5 flex">
+            <div class="grow shrink basis-0 self-stretch text-[13px] font-medium leading-tight">
+              <.live_component
+                module={InfluenceAvenueWeb.SortingComponent}
+                id={"sorting-#{col[:sort_type]}"}
+                label={col[:label]}
+                key={col[:sort_key]}
+                sorting={col[:sorting]}
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <%!-- body --%>
+      <div
+        :for={row <- @rows} id={@row_id && @row_id.(row)}
+        id={@id}
+        phx-hook="InfinityScroll"
+        phx-update={match?(%Phoenix.LiveView.LiveStream{}, @rows) && "stream"}
+        class="self-stretch h-16 px-5 bg-white border border-neutral-200 justify-start items-center gap-6 inline-flex"
+      >
+        <div class="copy-row">
+          <.copy_button
+            id={"row-#{row.id}"}
+            phx-hook="CopyRow"
+            data-to={"#copied-row-#{row.id}"}
+            class="hover:text-green-600 hover:animate-pulse"
+          >
+            <.icon name="hero-clipboard-document" />
+          </.copy_button>
+          <input
+            type="hidden"
+            id={"copied-row-#{row.id}"}
+            value={"Donation Date: #{row.date}\nCorporation Name: #{row.corpname}\nAmount(in USD): #{row.amount}\nPolitical Party Affiliation: #{row.recipient_party}\nDonor: #{row.contributor_name}\nCandidate or PAC: #{row.recipient_name}"}
+          />
+        </div>
+
+        <div
+          :for={{col, i} <- Enum.with_index(@col)}
+          class="grow shrink basis-0 self-stretch justify-center items-center gap-2.5 flex py-4 hover:cursor-pointer ">
+
+          <div class="grow shrink basis-0 self-stretch justify-start items-center gap-2.5 flex">
+            <div class="grow shrink basis-0 self-stretch text-zinc-800 text-[13px] font-normal leading-tight">
+              <%= render_slot(col, @row_item.(row)) %>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
     """
   end

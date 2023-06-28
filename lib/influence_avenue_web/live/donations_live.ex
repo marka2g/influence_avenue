@@ -12,7 +12,7 @@ defmodule InfluenceAvenueWeb.Live.DonationsLive do
       socket
       |> assign(
         offset: 0,
-        limit: 25,
+        limit: 50,
         count: count
       )
 

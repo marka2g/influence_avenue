@@ -1,8 +1,7 @@
 <div class="donations-containe min-w-max">
-  
   <.live_component module={InfluenceAvenueWeb.FilterComponent} id="filter" filter={@filter} />
 
-  <.table id="donations" rows={@donations}>
+  <.resp_table id="donations" rows={@donations}>
     <:col 
       :let={donation} 
       label="#"
@@ -83,5 +82,5 @@
     >
       <%= donation.recipient_name %>
     </:col>
-  </.table>
+  </.resp_table>
 </div>
