@@ -50,7 +50,7 @@ defmodule InfluenceAvenueWeb.CoreComponents do
       data-cancel={JS.exec(@on_cancel, "phx-remove")}
       class="relative z-50 hidden"
     >
-      <div id={"#{@id}-bg"} class="bg-zinc-50/90 fixed inset-0 transition-opacity" aria-hidden="true" />
+      <div id={"#{@id}-bg"} class="fixed inset-0 transition-opacity bg-zinc-50/90" aria-hidden="true" />
       <div
         class="fixed inset-0 overflow-y-auto"
         aria-labelledby={"#{@id}-title"}
@@ -59,23 +59,23 @@ defmodule InfluenceAvenueWeb.CoreComponents do
         aria-modal="true"
         tabindex="0"
       >
-        <div class="flex min-h-full items-center justify-center">
+        <div class="flex items-center justify-center min-h-full">
           <div class="w-full max-w-3xl p-4 sm:p-6 lg:py-8">
             <.focus_wrap
               id={"#{@id}-container"}
               phx-window-keydown={JS.exec("data-cancel", to: "##{@id}")}
               phx-key="escape"
               phx-click-away={JS.exec("data-cancel", to: "##{@id}")}
-              class="shadow-zinc-700/10 ring-zinc-700/10 relative hidden rounded-2xl bg-white p-14 shadow-lg ring-1 transition"
+              class="relative hidden transition bg-white shadow-lg shadow-zinc-700/10 ring-zinc-700/10 rounded-2xl p-14 ring-1"
             >
               <div class="absolute top-6 right-5">
                 <button
                   phx-click={JS.exec("data-cancel", to: "##{@id}")}
                   type="button"
-                  class="-m-3 flex-none p-3 opacity-20 hover:opacity-40"
+                  class="flex-none p-3 -m-3 opacity-20 hover:opacity-40"
                   aria-label={gettext("close")}
                 >
-                  <.icon name="hero-x-mark-solid" class="h-5 w-5" />
+                  <.icon name="hero-x-mark-solid" class="w-5 h-5" />
                 </button>
               </div>
               <div id={"#{@id}-content"}>
@@ -120,13 +120,13 @@ defmodule InfluenceAvenueWeb.CoreComponents do
       {@rest}
     >
       <p :if={@title} class="flex items-center gap-1.5 text-sm font-semibold leading-6">
-        <.icon :if={@kind == :info} name="hero-information-circle-mini" class="h-4 w-4" />
-        <.icon :if={@kind == :error} name="hero-exclamation-circle-mini" class="h-4 w-4" />
+        <.icon :if={@kind == :info} name="hero-information-circle-mini" class="w-4 h-4" />
+        <.icon :if={@kind == :error} name="hero-exclamation-circle-mini" class="w-4 h-4" />
         <%= @title %>
       </p>
       <p class="mt-2 text-sm leading-5"><%= msg %></p>
-      <button type="button" class="group absolute top-1 right-1 p-2" aria-label={gettext("close")}>
-        <.icon name="hero-x-mark-solid" class="h-5 w-5 opacity-40 group-hover:opacity-70" />
+      <button type="button" class="absolute p-2 group top-1 right-1" aria-label={gettext("close")}>
+        <.icon name="hero-x-mark-solid" class="w-5 h-5 opacity-40 group-hover:opacity-70" />
       </button>
     </div>
     """
@@ -153,7 +153,7 @@ defmodule InfluenceAvenueWeb.CoreComponents do
       phx-connected={hide("#client-error")}
       hidden
     >
-      Attempting to reconnect <.icon name="hero-arrow-path" class="ml-1 h-3 w-3 animate-spin" />
+      Attempting to reconnect <.icon name="hero-arrow-path" class="w-3 h-3 ml-1 animate-spin" />
     </.flash>
 
     <.flash
@@ -165,7 +165,7 @@ defmodule InfluenceAvenueWeb.CoreComponents do
       hidden
     >
       Hang in there while we get back on track
-      <.icon name="hero-arrow-path" class="ml-1 h-3 w-3 animate-spin" />
+      <.icon name="hero-arrow-path" class="w-3 h-3 ml-1 animate-spin" />
     </.flash>
     """
   end
@@ -199,7 +199,7 @@ defmodule InfluenceAvenueWeb.CoreComponents do
     <.form :let={f} for={@for} as={@as} {@rest}>
       <div class="mt-10 space-y-8 bg-white">
         <%= render_slot(@inner_block, f) %>
-        <div :for={action <- @actions} class="mt-2 flex items-center justify-between gap-6">
+        <div :for={action <- @actions} class="flex items-center justify-between gap-6 mt-2">
           <%= render_slot(action, f) %>
         </div>
       </div>
@@ -360,7 +360,7 @@ defmodule InfluenceAvenueWeb.CoreComponents do
       <select
         id={@id}
         name={@name}
-        class="mt-2 block w-full rounded-md border border-gray-300 bg-white shadow-sm focus:border-zinc-400 focus:ring-0 sm:text-sm"
+        class="block w-full mt-2 bg-white border border-gray-300 rounded-md shadow-sm focus:border-zinc-400 focus:ring-0 sm:text-sm"
         multiple={@multiple}
         {@rest}
       >
@@ -436,7 +436,7 @@ defmodule InfluenceAvenueWeb.CoreComponents do
 
   def error(assigns) do
     ~H"""
-    <p class="mt-3 flex gap-3 text-sm leading-6 text-rose-600 phx-no-feedback:hidden">
+    <p class="flex gap-3 mt-3 text-sm leading-6 text-rose-600 phx-no-feedback:hidden">
       <.icon name="hero-exclamation-circle-mini" class="mt-0.5 h-5 w-5 flex-none" />
       <%= render_slot(@inner_block) %>
     </p>
@@ -501,18 +501,18 @@ defmodule InfluenceAvenueWeb.CoreComponents do
       end
 
     ~H"""
-    <div class="overflow-y-auto px-4 sm:overflow-visible sm:px-0">
+    <div class="px-4 overflow-y-auto sm:overflow-visible sm:px-0">
       <table class="w-[40rem] mt-11 sm:w-full">
-        <thead class="text-sm text-left leading-6 text-zinc-500">
+        <thead class="text-sm leading-6 text-left text-zinc-500">
           <tr>
-            <th :for={col <- @col} class="p-0 pr-6 pb-4 font-normal"><%= col[:label] %></th>
+            <th :for={col <- @col} class="p-0 pb-4 pr-6 font-normal"><%= col[:label] %></th>
             <th class="relative p-0 pb-4"><span class="sr-only"><%= gettext("Actions") %></span></th>
           </tr>
         </thead>
         <tbody
           id={@id}
           phx-update={match?(%Phoenix.LiveView.LiveStream{}, @rows) && "stream"}
-          class="relative divide-y divide-zinc-100 border-t border-zinc-200 text-sm leading-6 text-zinc-700"
+          class="relative text-sm leading-6 border-t divide-y divide-zinc-100 border-zinc-200 text-zinc-700"
         >
           <tr :for={row <- @rows} id={@row_id && @row_id.(row)} class="group hover:bg-zinc-50">
             <td
@@ -521,15 +521,15 @@ defmodule InfluenceAvenueWeb.CoreComponents do
               class={["relative p-0", @row_click && "hover:cursor-pointer"]}
             >
               <div class="block py-4 pr-6">
-                <span class="absolute -inset-y-px right-0 -left-4 group-hover:bg-zinc-50 sm:rounded-l-xl" />
+                <span class="absolute right-0 -inset-y-px -left-4 group-hover:bg-zinc-50 sm:rounded-l-xl" />
                 <span class={["relative", i == 0 && "font-semibold text-zinc-800"]}>
                   <%= render_slot(col, @row_item.(row)) %>
                 </span>
               </div>
             </td>
-            <td :if={@action != []} class="relative w-14 p-0">
-              <div class="relative whitespace-nowrap py-4 text-right text-sm font-medium">
-                <span class="absolute -inset-y-px -right-4 left-0 group-hover:bg-zinc-50 sm:rounded-r-xl" />
+            <td :if={@action != []} class="relative p-0 w-14">
+              <div class="relative py-4 text-sm font-medium text-right whitespace-nowrap">
+                <span class="absolute left-0 -inset-y-px -right-4 group-hover:bg-zinc-50 sm:rounded-r-xl" />
                 <span
                   :for={action <- @action}
                   class="relative ml-4 font-semibold leading-6 text-zinc-800 hover:text-zinc-700"
@@ -582,9 +582,9 @@ defmodule InfluenceAvenueWeb.CoreComponents do
       end
 
     ~H"""
-    <div class="overflow-y-auto px-4 sm:overflow-visible sm:px-0">
+    <div class="px-4 overflow-y-auto sm:overflow-visible sm:px-0">
       <table class="w-[40rem] mt-7 sm:w-full relative">
-        <thead class="shadow-zinc-900 shadow-2xl text-sm text-left text-zinc-700 bg-white sticky top-16 z-30 w-full">
+        <thead class="sticky z-30 w-full text-sm text-left bg-white shadow-2xl shadow-zinc-900 text-zinc-700 top-16">
           <tr>
             <th>
               <span class="sr-only">Copy Row to Clipboard</span>
@@ -608,11 +608,11 @@ defmodule InfluenceAvenueWeb.CoreComponents do
           id={@id}
           phx-hook="InfinityScroll"
           phx-update={match?(%Phoenix.LiveView.LiveStream{}, @rows) && "stream"}
-          class="relative divide-y divide-zinc-100 border-t border-zinc-200 text-sm leading-6 text-zinc-600"
+          class="relative text-sm leading-6 border-t divide-y divide-zinc-100 border-zinc-200 text-zinc-600"
         >
           <tr :for={row <- @rows} id={@row_id && @row_id.(row)} class="group hover:bg-zinc-50">
-            <td class="relative font-md hover:cursor-pointer pr-4">
-              <span class="absolute -inset-y-px right-0 -left-4 group-hover:bg-zinc-50 sm:rounded-l-xl" />
+            <td class="relative pr-4 font-md hover:cursor-pointer">
+              <span class="absolute right-0 -inset-y-px -left-4 group-hover:bg-zinc-50 sm:rounded-l-xl" />
 
               <.copy_button id={"row-#{row.id}"} phx-hook="CopyRow" data-to={"#copied-row-#{row.id}"}>
                 <.icon name="hero-clipboard-document" />
@@ -634,9 +634,9 @@ defmodule InfluenceAvenueWeb.CoreComponents do
                 </span>
               </div>
             </td>
-            <td :if={@action != []} class="relative w-14 p-0">
-              <div class="relative whitespace-nowrap py-4 text-right text-sm font-medium">
-                <span class="absolute -inset-y-px -right-4 left-0 group-hover:bg-zinc-50 sm:rounded-r-xl" />
+            <td :if={@action != []} class="relative p-0 w-14">
+              <div class="relative py-4 text-sm font-medium text-right whitespace-nowrap">
+                <span class="absolute left-0 -inset-y-px -right-4 group-hover:bg-zinc-50 sm:rounded-r-xl" />
                 <span
                   :for={action <- @action}
                   class="relative ml-4 font-semibold leading-6 text-zinc-800 hover:text-zinc-700"
@@ -689,9 +689,9 @@ defmodule InfluenceAvenueWeb.CoreComponents do
       end
 
     ~H"""
-    <div class="w-[1200px] h-full mt-2 bg-neutral-50 rounded-lg shadow-zinc-300 shadow-lg text-sm text-left flex-col justify-start items-start inline-flex">
+    <div class="w-[1200px] h-full mt-4 bg-neutral-50 rounded-lg shadow-zinc-300 shadow-lg text-sm text-left flex-col justify-start items-start inline-flex">
       <%!-- header --%>
-      <div class="self-stretch h-12 px-5 pt-2 mt-2 bg-gradient-to-r from-green-600 to-lime-500/80 border border-neutral-50 rounded-t-md justify-start items-center text-neutral-200 gap-6 inline-flex sticky top-20 z-30">
+      <div class="sticky z-30 inline-flex items-center self-stretch justify-start h-12 gap-6 px-5 pt-2 mt-2 border bg-gradient-to-r from-violet-600 to-neutral-900/80 border-neutral-50 rounded-t-md text-neutral-200 top-20">
         <div class="copy-paste-header">
           <.icon name="hero-clipboard-document" />
         </div>
@@ -722,7 +722,7 @@ defmodule InfluenceAvenueWeb.CoreComponents do
         <div
           :for={row <- @rows}
           id={@row_id && @row_id.(row)}
-          class="self-stretch h-16 px-4 bg-white border border-neutral-200 justify-start items-center gap-6 inline-flex w-full"
+          class="inline-flex items-center self-stretch justify-start w-full h-16 gap-6 px-4 bg-white border border-neutral-200"
         >
           <div class="copy-row">
             <.copy_button
@@ -775,7 +775,7 @@ defmodule InfluenceAvenueWeb.CoreComponents do
     <div class="mt-14">
       <dl class="-my-4 divide-y divide-zinc-100">
         <div :for={item <- @item} class="flex gap-4 py-4 text-sm leading-6 sm:gap-8">
-          <dt class="w-1/4 flex-none text-zinc-500"><%= item.title %></dt>
+          <dt class="flex-none w-1/4 text-zinc-500"><%= item.title %></dt>
           <dd class="text-zinc-700"><%= render_slot(item) %></dd>
         </div>
       </dl>
@@ -800,7 +800,7 @@ defmodule InfluenceAvenueWeb.CoreComponents do
         navigate={@navigate}
         class="text-sm font-semibold leading-6 text-zinc-800 hover:text-zinc-700"
       >
-        <.icon name="hero-arrow-left-solid" class="h-3 w-3" />
+        <.icon name="hero-arrow-left-solid" class="w-3 h-3" />
         <%= render_slot(@inner_block) %>
       </.link>
     </div>
@@ -823,7 +823,7 @@ defmodule InfluenceAvenueWeb.CoreComponents do
   ## Examples
 
       <.icon name="hero-x-mark-solid" />
-      <.icon name="hero-arrow-path" class="ml-1 w-3 h-3 animate-spin" />
+      <.icon name="hero-arrow-path" class="w-3 h-3 ml-1 animate-spin" />
   """
   attr(:name, :string, required: true)
   attr(:class, :string, default: nil)

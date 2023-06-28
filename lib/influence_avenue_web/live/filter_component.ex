@@ -6,13 +6,13 @@ defmodule InfluenceAvenueWeb.FilterComponent do
   def render(assigns) do
     ~H"""
     <div id="table-filter">
-      <.form :let={f} for={@changeset} as="filter" phx-submit="search" phx-target={@myself}>
-        <div class="flex flex-row gap-6">
-          <span class="isolate inline-flex rounded-md shadow-sm">
+      <.form :let={f} for={@changeset} as={:filter} phx-submit="search" phx-target={@myself}>
+        <div class="flex flex-row gap-6 my-3">
+          <span class="inline-flex rounded-md shadow-sm isolate">
             <.button
               phx-click="set-party"
               type="button"
-              class="relative inline-flex mr-2 items-center rounded-l-md bg-red-500 text-sm font-semibold text-red-900 ring-2 ring-inset ring-red-600 hover:bg-red-400 focus:z-10"
+              class="relative inline-flex items-center mr-6 -ml-px text-neutral-100 hover:text-neutral-50 bg-neutral-600 hover:bg-neutral-600/90 text-sm rounded-r-md font-semibold focus:z-10 ring-1 ring-inset ring-red-600 hover:shadow-[0_0_10px_red]"
               value={200}
             >
               Republican
@@ -20,7 +20,7 @@ defmodule InfluenceAvenueWeb.FilterComponent do
             <.button
               phx-click="set-party"
               type="button"
-              class="relative -ml-px inline-flex mr-2 items-center bg-sky-500 text-sm font-semibold text-sky-900 ring-2 ring-inset ring-sky-600 hover:bg-sky-400 focus:z-10"
+              class="relative inline-flex items-center mr-6 -ml-px text-neutral-100 hover:text-neutral-50 bg-neutral-600 hover:bg-neutral-600/90 text-sm rounded-r-md font-semibold focus:z-10 ring-2 ring-inset ring-blue-600 hover:shadow-[0_0_10px_blue]"
               value={100}
             >
               Democrat
@@ -28,7 +28,7 @@ defmodule InfluenceAvenueWeb.FilterComponent do
             <.button
               phx-click="set-party"
               type="button"
-              class="relative -ml-px inline-flex mr-2 items-center rounded-r-md bg-purple-500 text-sm font-semibold text-purple-900 ring-2 ring-inset ring-purple-600 hover:bg-purple-400 focus:z-10"
+              class="relative inline-flex items-center mr-6 -ml-px text-neutral-100 hover:text-neutral-50 hover:bg-neutral-600/90 text-sm rounded-r-md font-semibold focus:z-10 ring-2 ring-inset ring-violet-600 hover:shadow-[0_0_10px_violet]"
               value="I"
             >
               Independent
