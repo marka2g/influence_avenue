@@ -689,23 +689,17 @@ defmodule InfluenceAvenueWeb.CoreComponents do
       end
 
     ~H"""
-    <div
-      class="w-[1200px] h-full mt-2 bg-neutral-50 rounded-lg shadow-zinc-300 shadow-lg text-sm text-left flex-col justify-start items-start inline-flex"
-    >
+    <div class="w-[1200px] h-full mt-2 bg-neutral-50 rounded-lg shadow-zinc-300 shadow-lg text-sm text-left flex-col justify-start items-start inline-flex">
       <%!-- header --%>
-      <div
-        class="self-stretch h-12 px-5 pt-2 mt-2 bg-gradient-to-r from-green-600 to-lime-500/80 border border-neutral-50 rounded-t-md justify-start items-center text-neutral-200 gap-6 inline-flex sticky top-20 z-30"
-      >
+      <div class="self-stretch h-12 px-5 pt-2 mt-2 bg-gradient-to-r from-green-600 to-lime-500/80 border border-neutral-50 rounded-t-md justify-start items-center text-neutral-200 gap-6 inline-flex sticky top-20 z-30">
         <div class="copy-paste-header">
           <.icon name="hero-clipboard-document" />
         </div>
 
-        <div
-          class="grow shrink basis-0 self-stretch pt-2 justify-center items-center gap-2.5 flex"
-        >
+        <div class="grow shrink basis-0 self-stretch pt-2 justify-center items-center gap-2.5 flex">
           <div
-            class="grow shrink basis-0 self-stretch justify-start items-center gap-2.5 flex"
             :for={col <- @col}
+            class="grow shrink basis-0 self-stretch justify-start items-center gap-2.5 flex"
           >
             <div class="grow shrink basis-0 self-stretch text-[13px] font-medium leading-tight">
               <.live_component
@@ -750,9 +744,7 @@ defmodule InfluenceAvenueWeb.CoreComponents do
             :for={{col, i} <- Enum.with_index(@col)}
             class="grow shrink basis-0 self-stretch justify-center items-center gap-2.5 flex py-4 hover:cursor-pointer"
           >
-            <div
-              class="grow shrink basis-0 self-stretch justify-start items-center gap-2.5 flex"
-            >
+            <div class="grow shrink basis-0 self-stretch justify-start items-center gap-2.5 flex">
               <div class="grow shrink basis-0 self-stretch text-zinc-800 text-[13px] font-normal leading-tight last:overflow-x-auto">
                 <%= render_slot(col, @row_item.(row)) %>
               </div>
