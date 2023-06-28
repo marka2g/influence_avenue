@@ -11,5 +11,5 @@
         "priv/*/seeds.exs"
       ],
       &Path.wildcard(&1, match_dot: true)
-    ) -- ["scratch.ex"]
+    ) -- ["scratch.ex", "table_components.ex"]
 ]

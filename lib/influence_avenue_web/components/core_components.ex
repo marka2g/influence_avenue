@@ -257,7 +257,7 @@ defmodule InfluenceAvenueWeb.CoreComponents do
       type={@type}
       class={[
         "rounded-md py-1 px-2",
-        "text-sm font-semibold leading-6 text-neutral-700 hover:text-green-700 hover:animate-pulse",
+        "text-sm font-semibold leading-6 text-neutral-700",
         @class
       ]}
       {@rest}
@@ -343,7 +343,7 @@ defmodule InfluenceAvenueWeb.CoreComponents do
           name={@name}
           value="true"
           checked={@checked}
-          class="rounded border-zinc-300 text-zinc-900 focus:ring-0"
+          class="rounded border-zinc-300 text-zinc-800 focus:ring-0"
           {@rest}
         />
         <%= @label %>
@@ -380,7 +380,7 @@ defmodule InfluenceAvenueWeb.CoreComponents do
         id={@id}
         name={@name}
         class={[
-          "mt-2 block w-full rounded-lg text-zinc-900 focus:ring-0 sm:text-sm sm:leading-6",
+          "mt-2 block w-full rounded-lg text-zinc-800 focus:ring-0 sm:text-sm sm:leading-6",
           "min-h-[6rem] phx-no-feedback:border-zinc-300 phx-no-feedback:focus:border-zinc-400",
           @errors == [] && "border-zinc-300 focus:border-zinc-400",
           @errors != [] && "border-rose-400 focus:border-rose-400"
@@ -403,7 +403,7 @@ defmodule InfluenceAvenueWeb.CoreComponents do
         id={@id}
         value={Phoenix.HTML.Form.normalize_value(@type, @value)}
         class={[
-          "mt-2 block w-full rounded-lg text-zinc-900 focus:ring-0 sm:text-sm sm:leading-6",
+          "mt-2 block w-full rounded-lg text-zinc-800 focus:ring-0 sm:text-sm sm:leading-6",
           "phx-no-feedback:border-zinc-300 phx-no-feedback:focus:border-zinc-400",
           @errors == [] && "border-zinc-300 focus:border-zinc-400",
           @errors != [] && "border-rose-400 focus:border-rose-400"
@@ -490,10 +490,6 @@ defmodule InfluenceAvenueWeb.CoreComponents do
 
   slot :col, required: true do
     attr(:label, :string)
-    attr(:sort_key, :any)
-    attr(:sort_type, :string)
-    attr(:width_class, :string)
-    attr(:sorting, :any, doc: "this is the sorting assigns")
   end
 
   slot(:action, doc: "the slot for showing user actions in the last table column")
@@ -506,8 +502,89 @@ defmodule InfluenceAvenueWeb.CoreComponents do
 
     ~H"""
     <div class="overflow-y-auto px-4 sm:overflow-visible sm:px-0">
+      <table class="w-[40rem] mt-11 sm:w-full">
+        <thead class="text-sm text-left leading-6 text-zinc-500">
+          <tr>
+            <th :for={col <- @col} class="p-0 pr-6 pb-4 font-normal"><%= col[:label] %></th>
+            <th class="relative p-0 pb-4"><span class="sr-only"><%= gettext("Actions") %></span></th>
+          </tr>
+        </thead>
+        <tbody
+          id={@id}
+          phx-update={match?(%Phoenix.LiveView.LiveStream{}, @rows) && "stream"}
+          class="relative divide-y divide-zinc-100 border-t border-zinc-200 text-sm leading-6 text-zinc-700"
+        >
+          <tr :for={row <- @rows} id={@row_id && @row_id.(row)} class="group hover:bg-zinc-50">
+            <td
+              :for={{col, i} <- Enum.with_index(@col)}
+              phx-click={@row_click && @row_click.(row)}
+              class={["relative p-0", @row_click && "hover:cursor-pointer"]}
+            >
+              <div class="block py-4 pr-6">
+                <span class="absolute -inset-y-px right-0 -left-4 group-hover:bg-zinc-50 sm:rounded-l-xl" />
+                <span class={["relative", i == 0 && "font-semibold text-zinc-800"]}>
+                  <%= render_slot(col, @row_item.(row)) %>
+                </span>
+              </div>
+            </td>
+            <td :if={@action != []} class="relative w-14 p-0">
+              <div class="relative whitespace-nowrap py-4 text-right text-sm font-medium">
+                <span class="absolute -inset-y-px -right-4 left-0 group-hover:bg-zinc-50 sm:rounded-r-xl" />
+                <span
+                  :for={action <- @action}
+                  class="relative ml-4 font-semibold leading-6 text-zinc-800 hover:text-zinc-700"
+                >
+                  <%= render_slot(action, @row_item.(row)) %>
+                </span>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    """
+  end
+
+  @doc ~S"""
+  Renders a table with generic styling.
+
+  ## Examples
+
+      <.table id="users" rows={@users}>
+        <:col :let={user} label="id"><%= user.id %></:col>
+        <:col :let={user} label="username"><%= user.username %></:col>
+      </.table>
+  """
+  attr(:id, :string, required: true)
+  attr(:rows, :list, required: true)
+  attr(:row_id, :any, default: nil, doc: "the function for generating the row id")
+  attr(:row_click, :any, default: nil, doc: "the function for handling phx-click on each row")
+
+  attr(:row_item, :any,
+    default: &Function.identity/1,
+    doc: "the function for mapping each row before calling the :col and :action slots"
+  )
+
+  slot :col, required: true do
+    attr(:label, :string)
+    attr(:sort_key, :any)
+    attr(:sort_type, :string)
+    attr(:width_class, :string)
+    attr(:sorting, :any, doc: "this is the sorting assigns")
+  end
+
+  slot(:action, doc: "the slot for showing user actions in the last table column")
+
+  def donations_table(assigns) do
+    assigns =
+      with %{rows: %Phoenix.LiveView.LiveStream{}} <- assigns do
+        assign(assigns, row_id: assigns.row_id || fn {id, _item} -> id end)
+      end
+
+    ~H"""
+    <div class="overflow-y-auto px-4 sm:overflow-visible sm:px-0">
       <table class="w-[40rem] mt-7 sm:w-full relative">
-        <thead class="shadow-zinc-900 shadow-2xl text-sm text-left text-zinc-700 sticky top-16 bg-white z-30 w-full">
+        <thead class="shadow-zinc-900 shadow-2xl text-sm text-left text-zinc-700 bg-white sticky top-16 z-30 w-full">
           <tr>
             <th>
               <span class="sr-only">Copy Row to Clipboard</span>
@@ -552,7 +629,7 @@ defmodule InfluenceAvenueWeb.CoreComponents do
               class={["relative font-md #{col[:tr_class]}", @row_click && "hover:cursor-pointer"]}
             >
               <div class="block py-4 pr-6">
-                <span class={["relative", i == 0 && "font-semibold text-zinc-900"]}>
+                <span class={["relative", i == 0 && "font-semibold text-zinc-800"]}>
                   <%= render_slot(col, @row_item.(row)) %>
                 </span>
               </div>
@@ -562,7 +639,7 @@ defmodule InfluenceAvenueWeb.CoreComponents do
                 <span class="absolute -inset-y-px -right-4 left-0 group-hover:bg-zinc-50 sm:rounded-r-xl" />
                 <span
                   :for={action <- @action}
-                  class="relative ml-4 font-semibold leading-6 text-zinc-900 hover:text-zinc-700"
+                  class="relative ml-4 font-semibold leading-6 text-zinc-800 hover:text-zinc-700"
                 >
                   <%= render_slot(action, @row_item.(row)) %>
                 </span>
@@ -571,6 +648,110 @@ defmodule InfluenceAvenueWeb.CoreComponents do
           </tr>
         </tbody>
       </table>
+    </div>
+    """
+  end
+
+  # Responsive Table
+  @doc ~S"""
+  Renders a table with generic styling.
+
+  ## Examples
+
+      <.resp_table id="users" rows={@users}>
+        <:col :let={user} label="id"><%= user.id %></:col>
+        <:col :let={user} label="username"><%= user.username %></:col>
+      </.resp_table>
+  """
+  attr(:id, :string, required: true)
+  attr(:rows, :list, required: true)
+  attr(:row_id, :any, default: nil, doc: "the function for generating the row id")
+  attr(:row_click, :any, default: nil, doc: "the function for handling phx-click on each row")
+
+  attr(:row_item, :any,
+    default: &Function.identity/1,
+    doc: "the function for mapping each row before calling the :col and :action slots"
+  )
+
+  slot :col, required: true do
+    attr(:label, :string)
+    attr(:sort_key, :any)
+    attr(:sort_type, :string)
+    attr(:sorting, :any, doc: "this is the sorting assigns")
+  end
+
+  slot(:action, doc: "the slot for showing user actions in the last table column")
+
+  def resp_table(assigns) do
+    assigns =
+      with %{rows: %Phoenix.LiveView.LiveStream{}} <- assigns do
+        assign(assigns, row_id: assigns.row_id || fn {id, _item} -> id end)
+      end
+
+    ~H"""
+    <div class="w-[1200px] h-full mt-2 bg-neutral-50 rounded-lg shadow-zinc-300 shadow-lg text-sm text-left flex-col justify-start items-start inline-flex">
+      <%!-- header --%>
+      <div class="self-stretch h-12 px-5 pt-2 mt-2 bg-gradient-to-r from-green-600 to-lime-500/80 border border-neutral-50 rounded-t-md justify-start items-center text-neutral-200 gap-6 inline-flex sticky top-20 z-30">
+        <div class="copy-paste-header">
+          <.icon name="hero-clipboard-document" />
+        </div>
+
+        <div class="grow shrink basis-0 self-stretch pt-2 justify-center items-center gap-2.5 flex">
+          <div
+            :for={col <- @col}
+            class="grow shrink basis-0 self-stretch justify-start items-center gap-2.5 flex"
+          >
+            <div class="grow shrink basis-0 self-stretch text-[13px] font-medium leading-tight">
+              <.live_component
+                module={InfluenceAvenueWeb.SortingComponent}
+                id={"sorting-#{col[:sort_type]}"}
+                label={col[:label]}
+                key={col[:sort_key]}
+                sorting={col[:sorting]}
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+      <%!-- body --%>
+      <div
+        id={@id}
+        phx-hook="InfinityScroll"
+        phx-update={match?(%Phoenix.LiveView.LiveStream{}, @rows) && "stream"}
+      >
+        <div
+          :for={row <- @rows}
+          id={@row_id && @row_id.(row)}
+          class="self-stretch h-16 px-4 bg-white border border-neutral-200 justify-start items-center gap-6 inline-flex w-full"
+        >
+          <div class="copy-row">
+            <.copy_button
+              id={"row-#{row.id}"}
+              phx-hook="CopyRow"
+              data-to={"#copied-row-#{row.id}"}
+              class="hover:text-green-600 hover:animate-pulse"
+            >
+              <.icon name="hero-clipboard-document" />
+            </.copy_button>
+            <input
+              type="hidden"
+              id={"copied-row-#{row.id}"}
+              value={"Donation Date: #{row.date}\nCorporation Name: #{row.corpname}\nAmount(in USD): #{row.amount}\nPolitical Party Affiliation: #{row.recipient_party}\nDonor: #{row.contributor_name}\nCandidate or PAC: #{row.recipient_name}"}
+            />
+          </div>
+
+          <div
+            :for={{col, i} <- Enum.with_index(@col)}
+            class="grow shrink basis-0 self-stretch justify-center items-center gap-2.5 flex py-4 hover:cursor-pointer"
+          >
+            <div class="grow shrink basis-0 self-stretch justify-start items-center gap-2.5 flex">
+              <div class="grow shrink basis-0 self-stretch text-zinc-800 text-[13px] font-normal leading-tight last:overflow-x-auto">
+                <%= render_slot(col, @row_item.(row)) %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
     """
   end
@@ -617,7 +798,7 @@ defmodule InfluenceAvenueWeb.CoreComponents do
     <div class="mt-16">
       <.link
         navigate={@navigate}
-        class="text-sm font-semibold leading-6 text-zinc-900 hover:text-zinc-700"
+        class="text-sm font-semibold leading-6 text-zinc-800 hover:text-zinc-700"
       >
         <.icon name="hero-arrow-left-solid" class="h-3 w-3" />
         <%= render_slot(@inner_block) %>

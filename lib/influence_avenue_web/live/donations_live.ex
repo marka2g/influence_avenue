@@ -12,7 +12,7 @@ defmodule InfluenceAvenueWeb.Live.DonationsLive do
       socket
       |> assign(
         offset: 0,
-        limit: 25,
+        limit: 50,
         count: count
       )
 
@@ -31,6 +31,23 @@ defmodule InfluenceAvenueWeb.Live.DonationsLive do
       else
         socket
       end
+
+    {:noreply, socket}
+  end
+
+  @imp true
+  def handle_event("set-party", %{"value" => party}, socket) do
+    filter = %{"recipient_party" => party}
+
+    IO.inspect(filter, label: "filter in set-party")
+
+    case FilterForm.parse(filter) do
+      {:ok, opts} ->
+        send(self(), {:update, opts})
+
+      {:error, changeset} ->
+        {:noreply, assign(socket, :changeset, changeset)}
+    end
 
     {:noreply, socket}
   end
